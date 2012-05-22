@@ -1,0 +1,22 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<form action="scaffold_app.html" method="get">
+			<input type="text" name="userName" />
+			<input type="submit" value="Go!" />
+		</form>
+
+		<form action="/db/test/create" method="post">
+			<input type="hidden" name="create[test]" value="foo" /> 
+			<input type="hidden" name="test1" value="foo" /> 
+			<input type="submit" value="create" />
+		</form>
+
+		<form action="/db/test/delete" method="post">
+			<input type="hidden" name="_id" value="4f31817d2da6bfde0a000001" /> 
+			<input type="submit" value="delete" />
+		</form>
+
+	</body>
+</html>

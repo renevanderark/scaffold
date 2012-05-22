@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<style type="text/css">
+			div span.user {
+				display: block;
+				color: blue;
+			}
+			div span.user.self {
+				background-color: #afa;
+			}
+			#burnBox {
+				font-family: sans, arial;
+				font-size: 11px;
+			}
+		</style>
+		<script type="text/javascript" src="js/cometd/cometd.js"></script>
+		<script type="text/javascript" src="js/jquery/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery/jquery.cometd.js"></script>
+		<script type="text/javascript" src="js/bayeuxclient.js"></script>
+		<script type="text/javascript" src="js/scrollappend.js"></script>
+		<script type="text/javascript" src="js/util.js"></script>
+		<script type="text/javascript" src="js/userbox.js"></script>
+		<script type="text/javascript" src="js/chatbox.js"></script>
+		<script type="text/javascript" src="js/urlparams.js"></script>
+		<script type="text/javascript">
+			var bayeuxClient = new BayeuxClient("localhost", 8000, "test", "info");
+			var userName = (urlParams.userName ? urlParams.userName : "anonymous");
+			if(!userName) { window.location.href = "index.html"; }
+
+			$(document).ready(function() {
+				$("#userBox").userBox(bayeuxClient, {
+					channel: "/user/box",
+					callback: function() { 
+						$("#chatBox").chatBox({
+							client: bayeuxClient,
+							userName: userName
+						});
+					},
+					logoutTarget: "index.html",
+					userName: userName
+				});
+			});
+
+			$(window).unload(function() { bayeuxClient.disconnect() });
+		</script>
+	</head>
+	<body>
+		<div id="userBox"></div>
+		<div id="chatBox"></div>
+	</body>
+</html>
+
