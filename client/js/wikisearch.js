@@ -1,16 +1,17 @@
 (function( $ ) {
 $.fn.wikiSearch = function(opts) {
+	Util.options = opts;
 	var labelTxt = Util.readOpt("label", "Search Wikipedia");
 	var lang = Util.readOpt("lang", "en");
 	var label = $("<label>").html(labelTxt);
 	var input = $("<input>");
-	
+	var onLink = Util.readOpt("callback", function(lemma, language) { location.href = "http://" + language + ".wikipedia.org/wiki/" + lemma; })
 	var resultList = $("<ul>");
 	var listResults = function(results) {
 		resultList.html("");
 		if(results.length > 1 && results[1].length > 0) {
 			$.each(results[1], function(i, hit) {
-				var item = $("<li>").append(hit);
+				var item = $("<li>").append($("<a>").append(hit).click(function() { onLink(hit, lang); }).css({color: "blue", cursor: "pointer"}) );
 				resultList.append(item);
 			});
 		} else {

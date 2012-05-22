@@ -28,7 +28,6 @@
 		<script type="text/javascript" src="js/util.js"></script>
 		<script type="text/javascript" src="js/userbox.js"></script>
 		<script type="text/javascript" src="js/chatbox.js"></script>
-		<script type="text/javascript" src="js/wikisearch.js"></script>
 		<script type="text/javascript" src="js/urlparams.js"></script>
 		<script type="text/javascript" src="js/wikisearch.js"></script>
 		<script type="text/javascript">
@@ -51,7 +50,7 @@
 					logoutTarget: "index.html",
 					userName: userName
 				});
-				$("#wikiSearch").wikiSearch();
+				$("#wikiSearch").wikiSearch({callback: function(lemma, lang) { location.href = "http://" + lang + ".wikipedia.org/wiki/" + lemma; }});
 			});
 
 			$(window).unload(function() { bayeuxClient.disconnect() });

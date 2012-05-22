@@ -50,7 +50,7 @@
 					data: {fields: ["user"], user: {'$ne': userName }},
 					dataType: "json",
 					async: false,
-					success: function(data) { console.log(data); $("#" + userBoxId).renderList(data) } 
+					success: function(data) { $("#" + userBoxId).renderList(data) } 
 				});
 
 				input.hide();
