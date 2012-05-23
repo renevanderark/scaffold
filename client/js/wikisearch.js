@@ -33,14 +33,24 @@ $.fn.wikiSearch = function(opts) {
 		});
 		flagPicker.append(flagSetter);
 	});
-	this.append(flagPicker).append(flagLink).append(label).append("<br>").append(input).append(resultList);
-	input.on("change", function(e) {
-		if(this.value.length > 0) {
+
+	var sendSearch = function(q) {
 			$.ajax("https://" + lang + ".wikipedia.org/w/api.php", {
-				data: {action: "opensearch", search: this.value, limit: 10, namespace:0, format: "json"},
+				data: {action: "opensearch", search: q, limit: 10, namespace:0, format: "json"},
 				dataType: "jsonp",
 				success: listResults
 			});
+		
+	};
+	this.append(flagPicker).append(flagLink).append(label).append("<br>").append(input).append(resultList);
+	input.on("change", function(e) {
+		if(this.value.length > 0) {
+			sendSearch(this.value);
+		}
+	});
+	input.on("keypress", function(e) {
+		if($.browser.msie && e.keyCode == 13 && this.value.length > 0) {
+			sendSearch(this.value);
 		}
 	});
 }})(jQuery);
