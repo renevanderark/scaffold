@@ -5,6 +5,13 @@
 				font-family: sans-serif, arial;
 				font-size: 10pt;
 			}
+			#mapdiv {
+				width: 300px;
+				height: 200px;
+				border: 1px solid;
+				float: left;
+				margin-left: 10px;
+			}
 			#alchemyBox {
 				border: 1px solid;
 				width: 400px;
@@ -39,6 +46,7 @@
 				background-color: #afa;
 			}
 		</style>
+		<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
 		<script type="text/javascript" src="js/cometd/cometd.js"></script>
 		<script type="text/javascript" src="js/jquery/jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="js/jquery/json2.js"></script>
@@ -51,10 +59,12 @@
 		<script type="text/javascript" src="js/urlparams.js"></script>
 		<script type="text/javascript" src="js/wikisearch.js"></script>
 		<script type="text/javascript" src="js/alchemy.js"></script>
+		<script type="text/javascript" src="js/mapselect.js"></script>
 		<script type="text/javascript">
 
 
 			var bayeuxClient = new BayeuxClient(document.domain, 8000, "test", "info");
+			var user = null;
 //			var userName = (urlParams.userName ? urlParams.userName : "anonymous");
 //			if(!userName) { window.location.href = "index.html"; }
 			var alchemy = new AlchemyProto("[enter key here]");
@@ -68,16 +78,28 @@
 							client: bayeuxClient,
 							userName: userName
 						});
+						user = userName;
 					},
-					logoutCallback: function() { $("#chatBox").hide(); },
+					logoutCallback: function() { $("#chatBox").hide(); user = null; },
 					userName: null
 				});
 				alchemy.setContainer($("#alchemyBox"));
 				$("#wikiSearch").wikiSearch({callback: function(lemma, lang) { 
 					alchemy.sendRequest("http://" + lang + ".wikipedia.org/wiki/" + lemma); 
 				}});
+				$("#mapdiv").mapSelect({
+					callback: function(ll) {
+						if(user) {
+							bayeuxClient.publish("/burn/chat", {
+								user: user,
+								msg: "clicked at: " + ll.lat + " - " + ll.lon,
+								time: new Date().getTime()
+							});
+						}
+					}
+				});
 			});
-
+			
 			$(window).unload(function() { bayeuxClient.disconnect() });
 		</script>
 	</head>
@@ -86,6 +108,7 @@
 		<div id="wikiSearch">
 		</div>
 		<div id="alchemyBox"><i>Named entities</i> </div>
+		<div id="mapdiv"></div>
 		<div id="chatBox"></div>
 	</body>
 </html>
