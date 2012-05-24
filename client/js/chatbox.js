@@ -24,6 +24,7 @@ $.fn.chatBox = function(opts) {
 	var channel = null;
 	var receive = function(message) {
 		if(message.data && message.data.msg && message.data.user) {
+			$("#" + chatMsgBoxId).append("<i>(" + Util.timeFormat(message.data.time) + "</i>) ");
 			$("#" + chatMsgBoxId).append("<b>" + message.data.user + "</b>: ");
 			$("#" + chatMsgBoxId).scrollAppend(message.data.msg + "<br />");
 		}
@@ -40,7 +41,8 @@ $.fn.chatBox = function(opts) {
 				if(e.keyCode == 13 && $(this).val().length > 0) {
 					client.publish(channel, {
 						user: userName,
-						msg: $(this).val().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+						msg: $(this).val().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"),
+						time: new Date().getTime()
 					});
 					$(this).val("");
 				}
@@ -49,5 +51,5 @@ $.fn.chatBox = function(opts) {
 	} else {
 		this.html("niet verbonden")
 	}
-	return this;			
-}})(jQuery);		
+	return this;
+}})(jQuery);

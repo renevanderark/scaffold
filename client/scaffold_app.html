@@ -22,6 +22,7 @@
 		</style>
 		<script type="text/javascript" src="js/cometd/cometd.js"></script>
 		<script type="text/javascript" src="js/jquery/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery/json2.js"></script>
 		<script type="text/javascript" src="js/jquery/jquery.cometd.js"></script>
 		<script type="text/javascript" src="js/bayeuxclient.js"></script>
 		<script type="text/javascript" src="js/scrollappend.js"></script>
@@ -33,7 +34,7 @@
 		<script type="text/javascript">
 
 
-			var bayeuxClient = new BayeuxClient("localhost", 8000, "test", "info");
+			var bayeuxClient = new BayeuxClient(document.domain, 8000, "test", "info");
 			var userName = (urlParams.userName ? urlParams.userName : "anonymous");
 			if(!userName) { window.location.href = "index.html"; }
 
