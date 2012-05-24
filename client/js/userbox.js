@@ -85,7 +85,7 @@
 				data: {user: userName},
 				dataType: "json"
 			});
-
+			if(logoutCallback) { logoutCallback(); }
 		}
 
 		/** Callback on error connecting **/
@@ -145,6 +145,7 @@
 		var logoutLinkTxt = Util.readOpt("logoutLinkTxt", "Uitloggen"); 
 		var logoutLinkId = Util.readOpt("logoutLinkId", "logout_link"); 
 		var logoutLinkCss = Util.readOpt("logoutLinkCss", {color: "blue", textDecoration: "none", fontSize: "11px", fontFamily: "sans, arial", cursor: "pointer"});
+		var logoutCallback = Util.readOpt("logoutCallback", null);
 		var userListMinifyId = Util.readOpt("userListMinifyId", "userListMinify");
 		var callbackFunc = Util.readOpt("callback", null);
 		var logoutTarget = Util.readOpt("logoutTarget", null);

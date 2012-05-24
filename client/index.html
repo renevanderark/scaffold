@@ -1,22 +1,92 @@
 <html>
-	<head>
+	<head id="head">
+		<style type="text/css">
+			body {
+				font-family: sans-serif, arial;
+				font-size: 10pt;
+			}
+			#alchemyBox {
+				border: 1px solid;
+				width: 400px;
+				float: left;
+				margin-left: 10px;
+			}
+			#alchemyBox dl dt {
+				float: left;
+				font-weight: bold;
+				width: 200px;
+			}
+			#alchemyBox dl dd {
+				margin-left: 200px;
+			}
+
+			#userBox {
+				float: right;
+			}
+			#wikiSearch {
+				float: left;
+				border: 1px solid;
+			}
+
+			#chatBox {
+				clear: both;
+			}
+			div span.user {
+				display: block;
+				color: blue;
+			}
+			div span.user.self {
+				background-color: #afa;
+			}
+		</style>
+		<script type="text/javascript" src="js/cometd/cometd.js"></script>
+		<script type="text/javascript" src="js/jquery/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery/json2.js"></script>
+		<script type="text/javascript" src="js/jquery/jquery.cometd.js"></script>
+		<script type="text/javascript" src="js/bayeuxclient.js"></script>
+		<script type="text/javascript" src="js/scrollappend.js"></script>
+		<script type="text/javascript" src="js/util.js"></script>
+		<script type="text/javascript" src="js/userbox.js"></script>
+		<script type="text/javascript" src="js/chatbox.js"></script>
+		<script type="text/javascript" src="js/urlparams.js"></script>
+		<script type="text/javascript" src="js/wikisearch.js"></script>
+		<script type="text/javascript" src="js/alchemy.js"></script>
+		<script type="text/javascript">
+
+
+			var bayeuxClient = new BayeuxClient(document.domain, 8000, "test", "info");
+//			var userName = (urlParams.userName ? urlParams.userName : "anonymous");
+//			if(!userName) { window.location.href = "index.html"; }
+			var alchemy = new AlchemyProto("[enter key here]");
+
+			$(document).ready(function() {
+				$("#userBox").userBox(bayeuxClient, {
+					channel: "/user/box",
+					callback: function(userName) {
+						$("#chatBox").show();
+						$("#chatBox").chatBox({
+							client: bayeuxClient,
+							userName: userName
+						});
+					},
+					logoutCallback: function() { $("#chatBox").hide(); },
+					userName: null
+				});
+				alchemy.setContainer($("#alchemyBox"));
+				$("#wikiSearch").wikiSearch({callback: function(lemma, lang) { 
+					alchemy.sendRequest("http://" + lang + ".wikipedia.org/wiki/" + lemma); 
+				}});
+			});
+
+			$(window).unload(function() { bayeuxClient.disconnect() });
+		</script>
 	</head>
 	<body>
-		<form action="scaffold_app.html" method="get">
-			<input type="text" name="userName" />
-			<input type="submit" value="Go!" />
-		</form>
-
-		<form action="/db/test/create" method="post">
-			<input type="hidden" name="create[test]" value="foo" /> 
-			<input type="hidden" name="test1" value="foo" /> 
-			<input type="submit" value="create" />
-		</form>
-
-		<form action="/db/test/delete" method="post">
-			<input type="hidden" name="_id" value="4f31817d2da6bfde0a000001" /> 
-			<input type="submit" value="delete" />
-		</form>
-
+		<div id="userBox"></div>
+		<div id="wikiSearch">
+		</div>
+		<div id="alchemyBox"><i>Named entities</i> </div>
+		<div id="chatBox"></div>
 	</body>
 </html>
+
