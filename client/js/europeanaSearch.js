@@ -7,11 +7,25 @@ $.fn.europeanaSearch = function(opts) {
 	var input = $("<input>");
 	var onEuropeanaLink = Util.readOpt("callback", function(address) { alert(address) })
 	var resultList = $("<ul>");
+
+	var viewRecord = function(data) {
+		if(data["dc:description"]) {
+			var descr = "";
+			$.each(data["dc:description"], function(i, line) { descr += line.replace(/<.+\/?>/, " "); });
+			onEuropeanaLink(descr);
+		}
+	};
+
 	var listResults = function(results) {
 		resultList.html("");
-		if(results.items) {
+		if(results.items && results.items.length > 0) {
 			$.each(results.items, function(i, hit) {
-				var item = $("<li>").append($("<a>").append(hit.title).click(function() { onEuropeanaLink(hit.guid); }).css({color: "blue", cursor: "pointer"}) );
+				var item = $("<li>").append($("<a>").append(hit.title).click(function() { 
+					$.ajax(hit.link, {
+						dataType: "jsonp",
+						success: viewRecord
+					});
+				}).css({color: "blue", cursor: "pointer"}));
 				resultList.append(item);
 			});
 		} else {

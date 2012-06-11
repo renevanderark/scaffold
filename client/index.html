@@ -74,7 +74,7 @@
 			var user = null;
 //			var userName = (urlParams.userName ? urlParams.userName : "anonymous");
 //			if(!userName) { window.location.href = "index.html"; }
-			var alchemy = new AlchemyProto("[enter alchemy api key here]");
+			var alchemy = new AlchemyProto("[enter api key]");
 
 			$(document).ready(function() {
 				$("#userBox").userBox(bayeuxClient, {
@@ -95,9 +95,9 @@
 					alchemy.sendRequest("http://" + lang + ".wikipedia.org/wiki/" + lemma); 
 				}});
 				$("#europeanaSearch").europeanaSearch({
-					apiKey: "[Enter Europeana apikey here]",
-					callback: function(address) {
-						alchemy.sendRequest(address);
+					apiKey: "[enter api key]",
+					callback: function(text) {
+						alchemy.sendText(text);
 					}
 				});
 
