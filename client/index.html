@@ -33,6 +33,12 @@
 			#wikiSearch {
 				float: left;
 				border: 1px solid;
+				margin-left: 10px;
+			}
+			#europeanaSearch {
+				float: left;
+				border: 1px solid;
+				width: 200px;
 			}
 
 			#chatBox {
@@ -58,6 +64,7 @@
 		<script type="text/javascript" src="js/chatbox.js"></script>
 		<script type="text/javascript" src="js/urlparams.js"></script>
 		<script type="text/javascript" src="js/wikisearch.js"></script>
+		<script type="text/javascript" src="js/europeanaSearch.js"></script>
 		<script type="text/javascript" src="js/alchemy.js"></script>
 		<script type="text/javascript" src="js/mapselect.js"></script>
 		<script type="text/javascript">
@@ -67,7 +74,7 @@
 			var user = null;
 //			var userName = (urlParams.userName ? urlParams.userName : "anonymous");
 //			if(!userName) { window.location.href = "index.html"; }
-			var alchemy = new AlchemyProto("[enter key here]");
+			var alchemy = new AlchemyProto("[enter alchemy api key here]");
 
 			$(document).ready(function() {
 				$("#userBox").userBox(bayeuxClient, {
@@ -84,9 +91,16 @@
 					userName: null
 				});
 				alchemy.setContainer($("#alchemyBox"));
-				$("#wikiSearch").wikiSearch({callback: function(lemma, lang) { 
+				$("#wikiSearch").wikiSearch({callback: function(lemma, lang) {
 					alchemy.sendRequest("http://" + lang + ".wikipedia.org/wiki/" + lemma); 
 				}});
+				$("#europeanaSearch").europeanaSearch({
+					apiKey: "[Enter Europeana apikey here]",
+					callback: function(address) {
+						alchemy.sendRequest(address);
+					}
+				});
+
 				$("#mapdiv").mapSelect({
 					callback: function(ll) {
 						if(user) {
@@ -105,6 +119,7 @@
 	</head>
 	<body>
 		<div id="userBox"></div>
+		<div id="europeanaSearch"></div>
 		<div id="wikiSearch">
 		</div>
 		<div id="alchemyBox"><i>Named entities</i> </div>
