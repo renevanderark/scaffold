@@ -17,13 +17,19 @@ var PortalSearch = function(key, opts) {
 	var showResults = function(data, success, state, resultsContainer) {
 		$("#" + spinner).hide();
 		if(data && data.totalResults > 0) {
+
 			var returnQ = data.description.replace(" - Europeana Open Search","");
 			if(!resultsContainer) { $(".search-result .resultset").hide(); }
+
 			var resultsTag = resultsContainer ? resultsContainer.html("") : $("<div>").addClass("resultset");
 			var descrTag = $("<a>").html(returnQ + " (" + data.totalResults + ")").click(function(e) {
 				resultsTag.toggle();
 			});
+
 			var div = $("<div>").addClass("search-result");
+			var closeLink = $("<a>").append($("<img>").attr("src", "img/cross.png")).click(function() {
+				div.remove();
+			}).css({"float": "right"});
 			$.each(data.items, function(i, item) {
 				var link = $("<a>").html(item.title);
 				var meta = $("<i>").html(item["europeana:dataProvider"]);
@@ -36,15 +42,17 @@ var PortalSearch = function(key, opts) {
 				});
 				resultsTag.append(pagLink);
 			}
+
 			if(data.startIndex > 0) {
 				var pagLink =  $("<a>").html("&lt;&lt;").css({"float": "left"}).click(function(e) {
 					paginate(returnQ, (data.startIndex / data.itemsPerPage), resultsTag);
 				});
 				resultsTag.append(pagLink);
 			}
+
 			resultsTag.append($("<div>").css({clear: "both"}));
 			if(!resultsContainer) {
-				div.append(descrTag).append(resultsTag);
+				div.append(descrTag).append(closeLink).append(resultsTag);
 				$("#" + container).prepend(div);
 			}
 		}
