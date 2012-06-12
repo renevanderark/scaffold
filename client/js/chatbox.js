@@ -10,7 +10,7 @@ $.fn.chatBox = function(opts) {
 		fontSize: "11px",
 		fontFamily: "sans, arial"
 	});
-	var channelPath = Util.readOpt("channel", "/burn/chat");
+	var channelPath = Util.readOpt("channel", "/main");
 	var inputId = Util.readOpt("inputId", "chatMessageInput");
 	var chatMsgBoxId = Util.readOpt("chatMsgBoxId", "chatMessageBox");
 	var chatMsgBoxCss = Util.readOpt("chatMsgBoxCss", {

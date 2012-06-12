@@ -70,11 +70,11 @@
 		<script type="text/javascript">
 
 
-			var bayeuxClient = new BayeuxClient(document.domain, 8000, "test", "info");
+			var bayeuxClient = new BayeuxClient(document.domain, 8000, "feed", "info");
 			var user = null;
 //			var userName = (urlParams.userName ? urlParams.userName : "anonymous");
 //			if(!userName) { window.location.href = "index.html"; }
-			var alchemy = new AlchemyProto("[enter api key]");
+			var alchemy = new AlchemyProto("[enter apikey]");
 
 			$(document).ready(function() {
 				$("#userBox").userBox(bayeuxClient, {
@@ -95,7 +95,7 @@
 					alchemy.sendRequest("http://" + lang + ".wikipedia.org/wiki/" + lemma); 
 				}});
 				$("#europeanaSearch").europeanaSearch({
-					apiKey: "[enter api key]",
+					apiKey: "[enter apikey]",
 					callback: function(text) {
 						alchemy.sendText(text);
 					}
@@ -104,7 +104,7 @@
 				$("#mapdiv").mapSelect({
 					callback: function(ll) {
 						if(user) {
-							bayeuxClient.publish("/burn/chat", {
+							bayeuxClient.publish("/main", {
 								user: user,
 								msg: "clicked at: " + ll.lat + " - " + ll.lon,
 								time: new Date().getTime()

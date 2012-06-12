@@ -23,7 +23,7 @@ var routeRequest = function(dbSet, request, response, path, opts) {
 	params = {};
 	format = opts && opts["format"] ? opts["format"] : "json";
 	verbose = opts && opts["verbose"] ? true : false;
-
+	callback = opts && opts["callback"] ? opts["callback"] : null;
 	var parts = path.split("/");
 	resource = parts[2];
 	if(!resource || !resource.match(/^[a-zA-Z_][0-9a-zA-Z\._]*[0-9a-zA-Z]$/)) {
@@ -57,6 +57,7 @@ var routeRequest = function(dbSet, request, response, path, opts) {
 					upsert();
 				}
 			}
+			if(callback) { callback({resource: resource, params: params}); }
 		});
 	}
 }
