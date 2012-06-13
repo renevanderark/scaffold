@@ -74,7 +74,7 @@
 			var user = null;
 //			var userName = (urlParams.userName ? urlParams.userName : "anonymous");
 //			if(!userName) { window.location.href = "index.html"; }
-			var alchemy = new AlchemyProto("[enter apikey]");
+			var alchemy = new AlchemyProto("[enter API key here]");
 
 			$(document).ready(function() {
 				$("#userBox").userBox(bayeuxClient, {
@@ -95,7 +95,7 @@
 					alchemy.sendRequest("http://" + lang + ".wikipedia.org/wiki/" + lemma); 
 				}});
 				$("#europeanaSearch").europeanaSearch({
-					apiKey: "[enter apikey]",
+					apiKey: "[enter API key here]",
 					callback: function(text) {
 						alchemy.sendText(text);
 					}
