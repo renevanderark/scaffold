@@ -11,8 +11,10 @@ var AlchemyProto = function(key) {
 			$.each(container.find("dd"), function(i, elem) {
 				if($(elem).html() == data[0]) {
 					var lemma = data[1][0];
-					var link = $("<a>").attr("href", "http://en.wikipedia.org/wiki/" + lemma.replace(/\s/, "_")).append(lemma);
-					$(elem).html(link);
+					if(lemma) {
+						var link = $("<a>").attr("href", "http://en.wikipedia.org/wiki/" + lemma.replace(/\s/, "_")).append(lemma);
+						$(elem).html(link);
+					}
 				}
 			});
 		}

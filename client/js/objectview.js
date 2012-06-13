@@ -5,6 +5,7 @@ var ObjectView = function(opts) {
 	var tabsId = opts.tabs;
 	var defList = null;
 	var spinnerNode = $("<img>").attr("src", "img/spinner.gif").attr("id", spinnerId);
+	var description = "";
 
 	var renderView = function(data) {
 		var container = $("#" + containerId);
@@ -20,8 +21,10 @@ var ObjectView = function(opts) {
 				var dd = $("<dd>");
 				if(typeof(val) == "string")
 					dd.html(val);
-				else
+				else 
 					$.each(val, function(k, v) { dd.append(v) });
+				if(key == "Description") { description = dd.html(); }
+
 				
 				defList.append(dt).append(dd);
 			}
@@ -39,7 +42,8 @@ var ObjectView = function(opts) {
 
 	this.onNamedEntities = function(callback) {
 		var container = $("#" + containerId);
-		container.html("named entities!");
+		callback(description);
+		container.prepend(spinnerNode);
 	};
 
 	this.onGeolocation = function(callback) {

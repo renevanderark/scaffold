@@ -3,6 +3,7 @@
 		<script type="text/javascript" src="js/jquery/jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="js/portalsearch.js"></script>
 		<script type="text/javascript" src="js/objectview.js"></script>
+		<script type="text/javascript" src="js/alchemy.js"></script>
 		<script type="text/javascript">
 			var objectView = new ObjectView({
 				container: "viewContainer",
@@ -15,7 +16,10 @@
 				spinner: "searchSpinner",
 				callback: function(link) { objectView.show(link); }
 			});
+			var alchemy = new AlchemyProto("32401827176de478005a40138a679dfce43bae56");
+
 			$(document).ready(function() {
+				alchemy.setContainer($("#viewContainer"));
 				$("#query").click(function(e) { 
 					if($(this).val() == "your search...") { 
 						$(this).val("");
@@ -43,7 +47,7 @@
 				$(".tab.ne").click(function(e) {
 					$(".tab").removeClass("selected");
 					$(this).addClass("selected");
-					objectView.onNamedEntities();
+					objectView.onNamedEntities(alchemy.sendText);
 				});
 
 				$(".tab.view").click(function(e) {
