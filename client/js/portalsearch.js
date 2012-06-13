@@ -2,6 +2,7 @@ var PortalSearch = function(key, opts) {
 	var apiKey = key;
 	var container = opts.resultBox;
 	var spinner = opts.spinner;
+	var callback = opts.callback ? opts.callback : function(addr) { alert(addr) };
 	var lastSearchQ = null;
 
 	var paginate = function(q, page, resultsContainer) {
@@ -33,7 +34,7 @@ var PortalSearch = function(key, opts) {
 			$.each(data.items, function(i, item) {
 				var link = $("<a>").html(item.title);
 				var meta = $("<i>").html(item["europeana:dataProvider"]);
-				resultsTag.append($("<li>").append(link).append(meta));
+				resultsTag.append($("<li>").append(link).append(meta).click(function(e) { callback(item.link) }));
 			});
 
 			if(data.startIndex + data.itemsPerPage < data.totalResults) {

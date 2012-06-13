@@ -2,10 +2,17 @@
 	<head>
 		<script type="text/javascript" src="js/jquery/jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="js/portalsearch.js"></script>
+		<script type="text/javascript" src="js/objectview.js"></script>
 		<script type="text/javascript">
-			var portalSearch = new PortalSearch("[enter api key]", {
+			var objectView = new ObjectView({
+				container: "viewContainer",
+				wrapper: "viewWrap",
+				spinner: "viewSpinner"
+			});
+			var portalSearch = new PortalSearch("[enter API key here]", {
 				resultBox: "searchResults",
-				spinner: "searchSpinner"
+				spinner: "searchSpinner",
+				callback: function(link) { objectView.show(link); }
 			});
 			$(document).ready(function() {
 				$("#query").click(function(e) { 
@@ -35,10 +42,13 @@
 			#queryblock { margin-left: 30px; float: left }
 			#queryblock h1 { margin: 0; margin-bottom: 5px; padding-top: 22px; }
 			#leftblock { width: 350px; float: left }
-			#query { width: 550px; border: 1px solid #a0a0a0; border-radius: 5px; padding: 2px 4px; color: #555; }
+			#query { width: 450px; border: 1px solid #a0a0a0; border-radius: 5px; padding: 2px 4px; color: #555; }
 			.styled-button { border: 1px solid #a0a0a0; border-radius: 5px; box-shadow: 0 1px 0 0 #FFFFFF inset; padding: 2px 4px; }
 			#searchSpinner { display: none; }
+			#viewSpinner { display: none; }
 			.search-result { background-color: #eaeaea; border-radius: 8px; padding: 10px; border: 1px solid #006f80; margin-top: 2px }
+			#viewContainer { background-color: #fff; border-radius: 8px; font-size: 10pt; padding: 10px;}
+			#viewWrap { background-color: #eaeaea; border-radius: 0px 8px 8px 8px; padding: 10px; border: 1px solid #006f80; margin-top: 35px; width: 600px; margin-left: 10px; float: left; display: none; }
 			.search-result a { color: blue; font-size: 12pt; cursor: pointer }
 			.search-result a:hover { text-decoration: underline }
 			.search-result .resultset { background-color: #fff; border-radius: 8px; padding: 10px 0 10px 0; margin-top: 5px; }
@@ -63,6 +73,10 @@
 			<input id="query" type="text" value="your search..." />
 			<button class="styled-button">Send search</button>
 		</div>
-		
+		<div id="viewWrap">
+			<div id="viewContainer">
+				<img id="viewSpinner" src="img/spinner.gif" />
+			</div>
+		</div>
 	</body>
 </html>
