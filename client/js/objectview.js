@@ -2,11 +2,16 @@ var ObjectView = function(opts) {
 	var containerId = opts.container;
 	var wrapperId = opts.wrapper;
 	var spinnerId = opts.spinner;
+	var tabsId = opts.tabs;
+	var defList = null;
+	var spinnerNode = $("<img>").attr("src", "img/spinner.gif").attr("id", spinnerId);
 
 	var renderView = function(data) {
 		var container = $("#" + containerId);
-		var defList = $("<dl>");
+		defList = $("<dl>");
+		$(".tab.view").addClass("selected");
 		$("#" + spinnerId).hide();
+
 		$.each(data, function(key, val) {
 			if(key.match(/^dc:/)) {
 				key = key.replace("dc:", "");
@@ -21,12 +26,31 @@ var ObjectView = function(opts) {
 				defList.append(dt).append(dd);
 			}
 		});
-		container.html(defList).prepend($("<img>").attr("src", "img/spinner.gif").attr("id", spinnerId));
+		container.html(defList).prepend(spinnerNode);
 		$("#" + spinnerId).hide();
-	}
+	};
+
+	this.onView = function() {
+		if(defList) {
+			var container = $("#" + containerId);
+			container.html(defList).prepend(spinnerNode);
+		}
+	};
+
+	this.onNamedEntities = function(callback) {
+		var container = $("#" + containerId);
+		container.html("named entities!");
+	};
+
+	this.onGeolocation = function(callback) {
+		var container = $("#" + containerId);
+		container.html("geolocation!");
+	};
 
 	this.show = function(link) {
 		$("#" + containerId + " dl").remove();
+		$("#" + tabsId).show();
+		$("#" + tabsId + " .tab").removeClass("selected");
 		$("#" + wrapperId).show();
 		$("#" + spinnerId).show();
 		$.ajax(link, {

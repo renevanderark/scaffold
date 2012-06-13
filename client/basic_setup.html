@@ -7,9 +7,10 @@
 			var objectView = new ObjectView({
 				container: "viewContainer",
 				wrapper: "viewWrap",
-				spinner: "viewSpinner"
+				spinner: "viewSpinner",
+				tabs: "viewTabs"
 			});
-			var portalSearch = new PortalSearch("[enter API key here]", {
+			var portalSearch = new PortalSearch("ZICPOGYUWT", {
 				resultBox: "searchResults",
 				spinner: "searchSpinner",
 				callback: function(link) { objectView.show(link); }
@@ -32,6 +33,24 @@
 						portalSearch.sendSearch($("#query").val());
 					}
 				});
+		
+				$(".tab.geo").click(function(e) {
+					$(".tab").removeClass("selected");
+					$(this).addClass("selected");
+					objectView.onGeolocation();
+				});
+				
+				$(".tab.ne").click(function(e) {
+					$(".tab").removeClass("selected");
+					$(this).addClass("selected");
+					objectView.onNamedEntities();
+				});
+
+				$(".tab.view").click(function(e) {
+					$(".tab").removeClass("selected");
+					$(this).addClass("selected");
+					objectView.onView();
+				});
 			});
 		</script>
 
@@ -41,14 +60,17 @@
 			#logo img { border: 0 }
 			#queryblock { margin-left: 30px; float: left }
 			#queryblock h1 { margin: 0; margin-bottom: 5px; padding-top: 22px; }
-			#leftblock { width: 350px; float: left }
+			#leftblock { width: 350px; float: left; min-height: 350px; }
 			#query { width: 450px; border: 1px solid #a0a0a0; border-radius: 5px; padding: 2px 4px; color: #555; }
 			.styled-button { border: 1px solid #a0a0a0; border-radius: 5px; box-shadow: 0 1px 0 0 #FFFFFF inset; padding: 2px 4px; }
 			#searchSpinner { display: none; }
 			#viewSpinner { display: none; }
 			.search-result { background-color: #eaeaea; border-radius: 8px; padding: 10px; border: 1px solid #006f80; margin-top: 2px }
 			#viewContainer { background-color: #fff; border-radius: 8px; font-size: 10pt; padding: 10px;}
-			#viewWrap { background-color: #eaeaea; border-radius: 0px 8px 8px 8px; padding: 10px; border: 1px solid #006f80; margin-top: 35px; width: 600px; margin-left: 10px; float: left; display: none; }
+			#viewTabs { display: none; width: 600px; margin-top: 35px; float: left; margin-left: 10px}
+			#viewTabs .tab.selected { background-color:  #eaeaea; border-color: #007f90; }
+			#viewTabs .tab { border-radius: 8px 8px 0px 0px; padding: 10px; border: 1px solid #006f80; border-bottom: none; background-color: #dadada; margin: 0;float: left; cursor: pointer; }
+			#viewWrap { background-color: #eaeaea; border-radius: 0px 8px 8px 8px; padding: 10px; border: 1px solid #006f80; width: 600px; margin-left: 10px; float: left; display: none; }
 			.search-result a { color: blue; font-size: 12pt; cursor: pointer }
 			.search-result a:hover { text-decoration: underline }
 			.search-result .resultset { background-color: #fff; border-radius: 8px; padding: 10px 0 10px 0; margin-top: 5px; }
@@ -72,6 +94,11 @@
 			<h1 id="title">Portal thingy</h1>
 			<input id="query" type="text" value="your search..." />
 			<button class="styled-button">Send search</button>
+		</div>
+		<div id="viewTabs">
+			<div class="tab view">View</div>
+			<div class="tab ne">Named Entities</div>
+			<div class="tab geo">Geolocation</div>
 		</div>
 		<div id="viewWrap">
 			<div id="viewContainer">
