@@ -1,9 +1,11 @@
 var ObjectView = function(opts) {
 	var containerId = opts.container;
+	var titleId = opts.title;
 	var wrapperId = opts.wrapper;
 	var spinnerId = opts.spinner;
 	var tabsId = opts.tabs;
 	var defList = null;
+	var recordId = null;
 	var spinnerNode = $("<img>").attr("src", "img/spinner.gif").attr("id", spinnerId);
 	var description = "";
 
@@ -25,7 +27,7 @@ var ObjectView = function(opts) {
 					$.each(val, function(k, v) { dd.append(v) });
 				if(key == "Description") { description = dd.html(); }
 
-				
+				if(key == "Title") { $("#" + titleId).html(val); }	
 				defList.append(dt).append(dd);
 			}
 		});
@@ -51,12 +53,40 @@ var ObjectView = function(opts) {
 		container.html("geolocation!");
 	};
 
+	this.onViewEnrichments = function(callback) {
+		var container = $("#" + containerId);
+		container.html(spinnerNode.hide());
+		$.ajax("db/named_entities", {
+			async: false,
+			data: {recordId: recordId},
+			success: function(data) {
+				if(data != [null]) {
+					container.append($("<b>").html("Named entities")).append("<br>");
+					var dl = $("<dl>");
+					$.each(data, function(i, info) {
+						if(info == null) { return; }
+						var dt = $("<dt>").html(info.type);
+						var dd = $("<dd>");
+						if(info.lemma.length > 0) {
+							dd.html($("<a>").attr("target", "_blank").attr("href", "http://en.wikipedia.org/wiki/" + info.lemma).html(info.text));
+						} else {
+							dd.html($("<b>").html(info.text));
+						}
+						dl.append(dt).append(dd);
+					});
+					container.append(dl);
+				}
+			}
+		});
+	};
+
 	this.show = function(link) {
 		$("#" + containerId + " dl").remove();
 		$("#" + tabsId).show();
 		$("#" + tabsId + " .tab").removeClass("selected");
 		$("#" + wrapperId).show();
 		$("#" + spinnerId).show();
+		recordId = link.replace("http://www.europeana.eu/portal/record/", "").replace(/\.json.*/, "").replace("/", "_");
 		$.ajax(link, {
 			dataType: "jsonp",
 			success: renderView

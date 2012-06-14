@@ -11,6 +11,7 @@
 		<script type="text/javascript">
 			var bayeuxClient = new BayeuxClient(document.domain, 8000, "feed", "info");
 			var objectView = new ObjectView({
+				title: "viewTitle",
 				container: "viewContainer",
 				wrapper: "viewWrap",
 				spinner: "viewSpinner",
@@ -87,6 +88,12 @@
 					$(this).addClass("selected");
 					objectView.onView();
 				});
+
+				$(".tab.enrich").click(function(e) {
+					$(".tab").removeClass("selected");
+					$(this).addClass("selected");
+					objectView.onViewEnrichments();
+				});
 			});
 		</script>
 
@@ -103,7 +110,8 @@
 			#searchSpinner { display: none; }
 			#viewSpinner { display: none; }
 			.search-result { background-color: #eaeaea; border-radius: 8px; padding: 10px; border: 1px solid #006f80; margin-top: 2px }
-			#viewContainer { background-color: #fff; border-radius: 8px; font-size: 10pt; padding: 10px;}
+			#viewTitle { background-color: #fff; border-radius: 8px 8px 0px 0px; font-size: 14pt; padding: 10px;}
+			#viewContainer { background-color: #fff; border-radius: 0px 0px 8px 8px; font-size: 10pt; padding: 10px;}
 			#viewTabs { display: none; width: 600px; margin-top: 10px; float: left; margin-left: 10px}
 			#viewTabs .tab.selected { background-color:  #eaeaea; border-color: #007f90; }
 			#viewTabs .tab { border-radius: 8px 8px 0px 0px; padding: 10px; border: 1px solid #006f80; border-bottom: none; background-color: #dadada; margin: 0;float: left; cursor: pointer; }
@@ -137,8 +145,10 @@
 			<div class="tab view">View</div>
 			<div class="tab ne">Named Entities</div>
 			<div class="tab geo">Geolocation</div>
+			<div class="tab enrich">View Enrichments</div>
 		</div>
 		<div id="viewWrap">
+			<div id="viewTitle"></div>
 			<div id="viewContainer">
 				<img id="viewSpinner" src="img/spinner.gif" />
 			</div>
