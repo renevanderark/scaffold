@@ -50,7 +50,12 @@ var ObjectView = function(opts) {
 
 	this.onGeolocation = function(callback) {
 		var container = $("#" + containerId);
-		container.html("geolocation!");
+		var mapDiv = $("<div>").css({height: "300px", width: "100%"}).attr("id", "map");
+		container.html(mapDiv);
+
+		mapDiv.mapSelect({
+			callback: function(a,b) { console.log(a,b);}
+		});
 	};
 
 	this.onViewEnrichments = function(callback) {

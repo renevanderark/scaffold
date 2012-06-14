@@ -1,10 +1,13 @@
 <html>
 	<head>
+		<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
 		<script type="text/javascript" src="js/cometd/cometd.js"></script>
 		<script type="text/javascript" src="js/jquery/jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="js/portalsearch.js"></script>
+		<script type="text/javascript" src="js/util.js"></script>
 		<script type="text/javascript" src="js/objectview.js"></script>
 		<script type="text/javascript" src="js/alchemy.js"></script>
+		<script type="text/javascript" src="js/mapselect.js"></script>
 		<script type="text/javascript" src="js/jquery/json2.js"></script>
 		<script type="text/javascript" src="js/jquery/jquery.cometd.js"></script>
 		<script type="text/javascript" src="js/bayeuxclient.js"></script>
@@ -95,6 +98,7 @@
 					objectView.onViewEnrichments();
 				});
 			});
+			$(window).unload(function() { bayeuxClient.disconnect() });
 		</script>
 
 		<style type="text/css">
