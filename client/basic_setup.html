@@ -23,8 +23,27 @@
 			});
 			var alchemy = new AlchemyProto("[enter API key here]");
 
-			function onFeed(data) {
-				console.log(data);
+			function onFeed(msg) {
+				if(msg && msg.data) {
+					var resource = msg.data.msg.resource;
+					var info = msg.data.msg.params.set;
+					if(resource == "named_entities") {
+				
+						var message = $("<span>");
+						var recordLink = $("<a>").attr("target", "_blank").attr("href", "http://www.europeana.eu/portal/record/" + info.recordId.replace("_", "/") + ".html").html("record");
+						
+						
+						message.append(recordLink);
+						message.append(" was linked to ");
+						if(info.lemma.length > 0) {
+							message.append($("<a>").attr("href", "http://en.wikipedia.org/wiki/"+ info.lemma).attr("target", "_blank").html(info.text));
+						} else {
+							message.append("'" + info.text + "'");
+						}
+						message.append(" (" + info.type + ")");
+						$("#feed").html(message.hide().fadeIn());
+					}
+				}
 			}
 
 			$(document).ready(function() {
@@ -73,7 +92,7 @@
 
 		<style type="text/css">
 			body { font-family: sans-serif, arial }
-			#feed { width: 534px; background-color: #eaeaea; border-radius: 5px; padding: 5px; height: 12px; border: 1px solid #006f80; margin-top: 3px; }
+			#feed { width: 534px; background-color: #eaeaea; border-radius: 5px; padding: 5px; height: 12px; border: 1px solid #006f80; margin-top: 3px; font-size: 10px; font-weight: bold; }
 			#logo { display: block; }
 			#logo img { border: 0 }
 			#queryblock { margin-left: 30px; float: left }
