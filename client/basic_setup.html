@@ -14,7 +14,7 @@
 			var portalSearch = new PortalSearch("[enter API key here]", {
 				resultBox: "searchResults",
 				spinner: "searchSpinner",
-				callback: function(link) { objectView.show(link); }
+				callback: function(link) { objectView.show(link); alchemy.setRecordId(link); }
 			});
 			var alchemy = new AlchemyProto("[enter API key here]");
 

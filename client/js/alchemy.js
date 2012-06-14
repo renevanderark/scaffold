@@ -1,6 +1,11 @@
 var AlchemyProto = function(key) {
 	var apiKey = key;
 	var container = null;
+	var recordId = null;
+
+	this.setRecordId = function(rId) {
+		recordId = rId;
+	};
 
 	this.setContainer = function(c) {
 		container = c;
@@ -8,16 +13,35 @@ var AlchemyProto = function(key) {
 
 	var showEntity = function(data) {
 		if(container && data.length > 1) {
-			$.each(container.find("dd"), function(i, elem) {
+			$.each(container.find("dd b"), function(i, elem) {
 				if($(elem).html() == data[0]) {
 					var lemma = data[1][0];
 					if(lemma) {
-						var link = $("<a>").attr("href", "http://en.wikipedia.org/wiki/" + lemma.replace(/\s/, "_")).append(lemma);
-						$(elem).html(link);
+						var link = $("<a>").attr("href", "http://en.wikipedia.org/wiki/" + lemma.replace(/\s/, "_")).append(lemma).attr("target", "_blank");
+						$(elem).prepend("&nbsp;(").prepend(link).append(")");
 					}
 				}
 			});
 		}
+	};
+	
+	var saveEntity = function(entity, elem, saveButton) {
+		var link = elem.find("a").attr("href");
+		var data = {
+			recordId: recordId.replace("http://www.europeana.eu/portal/record/", "").replace(/\.json.*/, "").replace("/", "_"),
+			lemma: link.replace(/.+\//, ""),
+			type: entity.type,
+			text: entity.text
+		};
+		$.ajax({
+			type: "POST",
+			url: "db/named_entities",
+			data: {upsert: data, set: data},
+			success: function(data) { 
+				saveButton.attr("disabled", "true");
+				saveButton.html("Enrichment saved");
+			}
+		});
 	};
 
 	this.callback = function(data) {
@@ -30,7 +54,13 @@ var AlchemyProto = function(key) {
 				var list = $("<dl>");
 				$.each(data.entities, function(i, entity) {
 					if(i > 10) return;
-					list.append("<dt>" + entity.type + ":</dt><dd>" + entity.text + "</dd>");
+					var dt = $("<dt>").html(entity.type);
+					var dd = $("<dd>").html($("<b>").html(entity.text));
+					var saveButton = $("<button>").click(function(e) {
+						saveEntity(entity, dd, $(this));
+					}).html("Save enrichment").css({"float": "right"});
+					dd.append(saveButton);
+					list.append(dt).append(dd); 
 					$.ajax("https://en.wikipedia.org/w/api.php", {
 						data: {action: "opensearch", search: entity.text, limit: 1, namespace:0, format: "json"},
 						dataType: "jsonp",
