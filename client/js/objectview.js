@@ -54,18 +54,45 @@ var ObjectView = function(opts) {
 		container.html(mapDiv);
 
 		mapDiv.mapSelect({
-			callback: function(a,b) { console.log(a,b);}
+			callback: function(latLon) { 
+				if(confirm("Are you sure you wish to add this location?")) {
+					$.ajax({
+						type: "POST",
+						url: "db/geolocations",
+						data: {
+							upsert: {recordId: recordId, geo: latLon },
+							set: {recordId: recordId, geo: latLon }
+						}
+					});
+				}			
+			}
 		});
 	};
 
 	this.onViewEnrichments = function(callback) {
 		var container = $("#" + containerId);
 		container.html(spinnerNode.hide());
+		$.ajax("db/geolocations", {
+			async: false,
+			data: {recordId: recordId},
+			success: function(data) {
+				if(data[0] != null) {
+					container.append($("<b>").html("Geolocations")).append("<br>");
+					var dl = $("<ul>");
+					$.each(data, function(i, info) {
+						if(info == null) { return; }
+						var item = $("<li>").html("Latitude: " + info.geo.lat + "<br>Longitude: " + info.geo.lon);
+						dl.append(item);
+					});
+					container.append(dl);
+				}
+			}
+		});
 		$.ajax("db/named_entities", {
 			async: false,
 			data: {recordId: recordId},
 			success: function(data) {
-				if(data != [null]) {
+				if(data[0] != null) {
 					container.append($("<b>").html("Named entities")).append("<br>");
 					var dl = $("<dl>");
 					$.each(data, function(i, info) {

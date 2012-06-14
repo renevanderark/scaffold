@@ -46,6 +46,14 @@
 						}
 						message.append(" (" + info.type + ")");
 						$("#feed").html(message.hide().fadeIn());
+					} else if(resource == "geolocations") {
+						var message = $("<span>");
+						var recordLink = $("<a>").attr("target", "_blank").attr("href", "http://www.europeana.eu/portal/record/" + info.recordId.replace("_", "/") + ".html").html("record");
+						var mapLink = $("<a>").attr("target", "_blank").attr("href", "http://maps.google.com/?q=" + info.geo.lat + "/" + info.geo.lon).html("geolocation");
+						message.append(recordLink);
+						message.append(" was linked to this ");
+						message.append(mapLink);
+						$("#feed").html(message.hide().fadeIn());
 					}
 				}
 			}
