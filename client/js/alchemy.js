@@ -29,7 +29,7 @@ var AlchemyProto = function(key) {
 		var link = elem.find("a").attr("href");
 		var data = {
 			recordId: recordId.replace("http://www.europeana.eu/portal/record/", "").replace(/\.json.*/, "").replace("/", "_"),
-			lemma: link.replace(/.+\//, ""),
+			lemma: (link ? link.replace(/.+\//, "") : ""),
 			type: entity.type,
 			text: entity.text
 		};
