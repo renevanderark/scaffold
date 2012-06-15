@@ -41,7 +41,7 @@ var ObjectView = function(opts) {
 					$.each(val, function(k, v) { dd.append(v).append("<br>"); });
 				if(key == "Description") { description = dd.html(); }
 
-				if(key == "Title") { $("#" + titleId).html(val); }	
+				if(key == "Title") { $("#" + titleId).html(dd.html()); }	
 				defList.append(dt).append(dd);
 			}
 		});
