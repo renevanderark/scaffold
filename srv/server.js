@@ -17,7 +17,7 @@ var url = require('url');
 var faye = require('faye');
 var bayeux = new faye.NodeAdapter({mount: '/feed', timeout: 45});
 var static = require("node-static");
-var fileServer = new static.Server('../client', {cache: false});
+var fileServer = new static.Server('../client');
 var db = require('mongojs').connect('test');
 var fayeClient = new faye.Client('http://localhost:8000/feed');
 
